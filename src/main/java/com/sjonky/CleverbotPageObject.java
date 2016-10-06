@@ -1,10 +1,7 @@
 package com.sjonky;
 
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -26,16 +23,17 @@ public class CleverbotPageObject {
 
     public String askAndGetResponse(String question) {
         writeQuestion(question, driver);
-        try {
-            Thread.sleep(3500);
-            return getResponse(driver);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-            return e.getMessage();
-        }
+        return getResponse(driver);
     }
 
     private String getResponse(WebDriver driver) {
+        while (!isFinishedResponding()) {
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
         List<WebElement> webElements = driver.findElements(By.className("bot"));
         return webElements.get(webElements.size() - 1).getText();
     }
@@ -50,6 +48,15 @@ public class CleverbotPageObject {
     private void clickSayItButton(WebDriver driver) {
         WebElement e = driver.findElement(By.className("sayitbutton"));
         e.click();
+    }
+
+    private boolean isFinishedResponding() {
+        try {
+            WebElement e = driver.findElement(By.id("snipTextIcon"));
+            return e != null && e.isDisplayed();
+        } catch (NoSuchElementException ex) {
+            return false;
+        }
     }
 
     private Boolean waitForPageToLoad() {

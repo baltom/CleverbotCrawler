@@ -5,6 +5,9 @@
     <groupId>com.sjonky</groupId>
     <artifactId>cleverbot</artifactId>
     <version>0.0.1-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
+
     <build>
         <plugins>
             <plugin>
@@ -17,7 +20,6 @@
             </plugin>
         </plugins>
     </build>
-    <packaging>war</packaging>
 
 
     <dependencies>
